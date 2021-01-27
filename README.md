@@ -1,14 +1,20 @@
 # spark-script-to-calculate-currency
 
+Read the JSON files in the subfolders of data directory
+
       scala> val df1 = sqlContext.read.json("/Users/khan/zervant/*/*.json")
       df1: org.apache.spark.sql.DataFrame = [count: bigint, currency: string ... 2 more fields]
-      
+
+Read the csv file for exchange rates of currency
+
       scala> val e_rate = spark.read.format("csv").option("header", "true").load("/Users/khan/zervant/exchange_rate.csv")
       e_rate: org.apache.spark.sql.DataFrame = [INSERTTIME: string, EXCAHNGERATE: string ... 1 more field]
       
+Display the rates for individual days at different timestamps
+
       scala> e_rate.show()
-      +-------------------+------------+--------+|
-      INSERTTIME|EXCAHNGERATE|CURRENCY|
+      +-------------------+------------+--------+
+      |INSERTTIME         |EXCAHNGERATE|CURRENCY|
       +-------------------+------------+--------+
       |2021-01-01 00:01:38|    0.731422|     GBP|
       |2021-01-01 00:00:57|    0.731422|     GBP|
@@ -33,10 +39,13 @@
       +-------------------+------------+--------+
       only showing top 20 rows
       
-      
+Aggregate exchange rates by dates for differeent curriencies
+
       scala> val exchange_rate = e_rate.groupBy($"CURRENCY",$"INSERTTIME".cast("date").as("INSERTTIME")).agg(mean("EXCAHNGERATE").alias("EXCAHNGERATE")).orderBy("INSERTTIME")
       exchange_rate: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [CURRENCY: string, INSERTTIME: date ... 1 more field]
-      
+  
+Display the aggregated exchange rates by dates
+
       scala> exchange_rate.show()
       +--------+----------+------------+
       |CURRENCY|INSERTTIME|EXCAHNGERATE|
@@ -63,10 +72,14 @@
       |     GBP|2021-01-10|   0.7371645|
       +--------+----------+------------+
       only showing top 20 rows
-      
+ 
+Make Temporary views of dataframes
+
       scala> df.createOrReplaceTempView("df1")
       scala> exchange_rate.createOrReplaceTempView("df2")
       
+Convert the values of EUR and GBP to USD and make a "Converted" Column to store the values in USD
+
       val result = spark.sql("""
       select count, 'USD' as currency, date, value,
           value * coalesce(
@@ -78,7 +91,9 @@
       from df1
       """)
       result: org.apache.spark.sql.DataFrame = [count: bigint, currency: string ... 3 more fields]
-      
+ 
+ Display the converted values
+ 
       scala> result.show()
       +-----+--------+----------+-----+------------------+
       |count|currency|      date|value|         converted|
@@ -106,9 +121,13 @@
       +-----+--------+----------+-----+------------------+
       only showing top 20 rows
       
+ Takes data for the last 3 available days, finds mean value in USD
+ 
       scala> val usd_mean = result.withColumn("rank", dense_rank().over(Window.partitionBy("currency").orderBy(desc("date")))).filter("rank <= 3 and currency = 'USD'").groupBy("date").agg(mean("converted"))
       usd_mean: org.apache.spark.sql.DataFrame = [date: string, avg(converted): double]
-      
+  
+ Display the mean value in USD for the last 3 days
+ 
       scala> usd_mean.show()
       +----------+-----------------+
       |      date|   avg(converted)|
