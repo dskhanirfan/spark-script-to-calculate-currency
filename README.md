@@ -1,4 +1,4 @@
-# spark-script-to-calculate-currency
+# spark-shell-script-to-calculate-currency
 
 **Read the JSON files in the subfolders of data directory**
      
