@@ -2,12 +2,8 @@
 
 **Read the JSON files in the subfolders of data directory**
      
-      ```scala
-      val df  = sqlContext.read.json("/Users/khan/zervant/*/*.json")
-      ```
       scala> val df1 = sqlContext.read.json("/Users/khan/zervant/*/*.json")
       df1: org.apache.spark.sql.DataFrame = [count: bigint, currency: string ... 2 more fields]
-      ```
 
 **Read the csv file for exchange rates of currency**
 
@@ -82,7 +78,8 @@
       scala> df.createOrReplaceTempView("df1")
       scala> exchange_rate.createOrReplaceTempView("df2")
       
-**Convert the values of EUR and GBP to USD and make a "Converted" Column to store the values in USD**
+**Convert the values of EUR and GBP to USD and make a "Converted" Column to store the values in USD** 
+**** correlated subquery (a fancy way of doing joins)****
 
       val result = spark.sql("""
       select count, 'USD' as currency, date, value,
