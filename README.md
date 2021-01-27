@@ -2,11 +2,9 @@
 
 **Read the JSON files in the subfolders of data directory**
      
-      ```scala
       scala> val df1 = sqlContext.read.json("/Users/khan/zervant/*/*.json")
       df1: org.apache.spark.sql.DataFrame = [count: bigint, currency: string ... 2 more fields]
-      ```
-
+      
 **Read the csv file for exchange rates of currency**
 
       scala> val e_rate = spark.read.format("csv").option("header", "true").load("/Users/khan/zervant/exchange_rate.csv")
