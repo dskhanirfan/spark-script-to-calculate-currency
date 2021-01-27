@@ -122,21 +122,54 @@
       +-----+--------+----------+-----+------------------+
       only showing top 20 rows
       
+      
+ **Multiply converted values and count to get exact valuation in mul column**
+      
+      scala> val countmulval = result.withColumn("mul", result("count")*result("converted"))
+      countmulval: org.apache.spark.sql.DataFrame = [count: bigint, currency: string ... 4 more fields]
+      scala> countmulval.show()
+     +-----+--------+----------+-----+------------------+------------------+         
+     |count|currency|      date|value|         converted|               mul|
+     +-----+--------+----------+-----+------------------+------------------+
+     |    3|     USD|2021-01-14|    4|2.9311893333333336|          8.793568|
+     |  102|     USD|2021-01-14|    3|               3.0|             306.0|
+     |  234|     USD|2021-01-14|    5| 3.663986666666667| 857.3728800000001|
+     |   68|     USD|2021-01-14|    6| 4.933771999999999|        335.496496|
+     |   20|     USD|2021-01-14|    1|0.7327973333333334|14.655946666666669|
+     |   28|     USD|2021-01-14|    5| 3.663986666666667|102.59162666666668|
+     |   48|     USD|2021-01-14|    7|               7.0|             336.0|
+     |   33|     USD|2021-01-14|    2|1.6445906666666665|54.271491999999995|
+     |  106|     USD|2021-01-14|   10| 7.327973333333334| 776.7651733333335|
+     |   97|     USD|2021-01-14|    3|          2.198392|213.24402400000002|
+     |   84|     USD|2021-01-14|    5| 3.663986666666667|307.77488000000005|
+     |  172|     USD|2021-01-14|    3|               3.0|             516.0|
+     |   79|     USD|2021-01-14|    4| 3.289181333333333|259.84532533333334|
+     |  140|     USD|2021-01-14|    2|1.4655946666666668|205.18325333333337|
+     |   50|     USD|2021-01-14|   10| 7.327973333333334| 366.3986666666667|
+     |  118|     USD|2021-01-14|    2|1.4655946666666668| 172.9401706666667|
+     |   31|     USD|2021-01-14|    3|               3.0|              93.0|
+     |  233|     USD|2021-01-14|    7|               7.0|            1631.0|
+     |  101|     USD|2021-01-14|    9|          6.595176|        666.112776|
+     |  181|     USD|2021-01-14|    8| 5.862378666666667|1061.0905386666668|
+     +-----+--------+----------+-----+------------------+------------------+
+     only showing top 20 rows
+
+      
  **Takes data for the last 3 available days, finds mean value in USD**
  
-      scala> val usd_mean = result.withColumn("rank", dense_rank().over(Window.partitionBy("currency").orderBy(desc("date")))).filter("rank <= 3 and currency = 'USD'").groupBy("date").agg(mean("converted"))
+      scala> val usd_mean = countmulval.withColumn("rank", dense_rank().over(Window.partitionBy("currency").orderBy(desc("date")))).filter("rank <= 3 and currency = 'USD'").groupBy("date").agg(mean("mul"))
       usd_mean: org.apache.spark.sql.DataFrame = [date: string, avg(converted): double]
   
  **Display the mean value in USD for the last 3 days**
  
       scala> usd_mean.show()
-      +----------+-----------------+
-      |      date|   avg(converted)|
-      +----------+-----------------+
-      |2021-01-15|4.603359414062508|
-      |2021-01-13|4.314121513671881|
-      |2021-01-14|4.552833897135422|
-      +----------+-----------------+
+     +----------+-----------------+                                                  
+     |      date|         avg(mul)|
+     +----------+-----------------+
+     |2021-01-15|593.2859392031252|
+     |2021-01-13|552.4245816640627|
+     |2021-01-14|613.6391253125003|
+     +----------+-----------------+
       
       
  ## Potential Improvements
