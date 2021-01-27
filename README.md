@@ -79,7 +79,7 @@
       scala> exchange_rate.createOrReplaceTempView("df2")
       
 **Convert the values of EUR and GBP to USD and make a "Converted" Column to store the values in USD** 
-**** correlated subquery (a fancy way of doing joins)****
+*correlated subquery (a fancy way of doing joins)*
 
       val result = spark.sql("""
       select count, 'USD' as currency, date, value,
