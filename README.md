@@ -2,6 +2,8 @@
 
 **Read the JSON files in the subfolders of data directory**
      
+      ```scala
+      val df  = sqlContext.read.json("/Users/khan/zervant/*/*.json")
       ```
       scala> val df1 = sqlContext.read.json("/Users/khan/zervant/*/*.json")
       df1: org.apache.spark.sql.DataFrame = [count: bigint, currency: string ... 2 more fields]
