@@ -1,6 +1,6 @@
 # spark-script-to-calculate-currency
 
-      ##scala> val df1 = sqlContext.read.json("/Users/khan/zervant/*/*.json")
+      scala> val df1 = sqlContext.read.json("/Users/khan/zervant/*/*.json")
       df1: org.apache.spark.sql.DataFrame = [count: bigint, currency: string ... 2 more fields]
       
       scala> val e_rate = spark.read.format("csv").option("header", "true").load("/Users/khan/zervant/exchange_rate.csv")
