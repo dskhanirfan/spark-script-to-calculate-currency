@@ -2,8 +2,10 @@
 
 **Read the JSON files in the subfolders of data directory**
 
-      ```scala
-      val df1 = sqlContext.read.json("/Users/khan/zervant/*/*.json")
+     ```ruby
+      require 'redcarpet'
+      markdown = Redcarpet.new("Hello World!")
+      puts markdown.to_html
       ```
       
       ```
