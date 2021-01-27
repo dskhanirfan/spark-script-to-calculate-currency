@@ -1,13 +1,7 @@
 # spark-script-to-calculate-currency
 
 **Read the JSON files in the subfolders of data directory**
-
-     ```ruby
-      require 'redcarpet'
-      markdown = Redcarpet.new("Hello World!")
-      puts markdown.to_html
-      ```
-      
+     
       ```
       scala> val df1 = sqlContext.read.json("/Users/khan/zervant/*/*.json")
       df1: org.apache.spark.sql.DataFrame = [count: bigint, currency: string ... 2 more fields]
