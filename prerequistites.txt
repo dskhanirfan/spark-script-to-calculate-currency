@@ -1,0 +1,28 @@
+
+Data link: https://drive.google.com/drive/folders/1CgqwpkNkOTzHoV_cAcm2Gw3JkIpmPHMg?usp=sharing
+
+Install dependencies: and update .bash_profile in Home Directory
+
+Install Java, stable release
+Install Apache Spark stable release 
+
+
+
+
+*******************************.bash_profile*************************************
+export SPARK_HOME=/Users/khan/spark
+export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
+
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-15.0.2.jdk/Contents/Home
+export JRE_HOME=/Library/java/JavaVirtualMachines/openjdk-13.jdk/contents/Home/jre/
+
+export PYSPARK_PYTHON=/Users/khan/miniconda/envs/sparkenv/bin/python
+export PYSPARK_DRIVER_PYTHON=/usr/local/bin/jupyter
+export PYSPARK_DRIVER_PYTHON_OPTS='notebook'
+********************************************************************************
+
+write the following in terminal/CMD
+pyspark
+will startup a new jupyter notebook session. The Spark UI can be consulted at the address:
+http://localhost:4040
+
