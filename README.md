@@ -1,4 +1,4 @@
-# spark-shell-scala-script-to-calculate-currency
+# spark-shell-scala-script-to-Aggregate-currency-Average-on-Daily-Routine
 
 **Read the JSON files in the subfolders of data directory**
      
